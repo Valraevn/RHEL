@@ -1,0 +1,29 @@
+variant: fcos
+version: 1.5.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE8CfNBnNfdZINcGaNUxLf6hj3plihLSmPRC2TFBZ+XI
+storage:
+  files:
+    - path: /etc/hostname
+      mode: 0644
+      contents:
+        inline: corejump
+    - path: /etc/ssh/sshd_config.d/40-disable-passwords.conf
+      mode: 0644
+      contents:
+        inline: |
+          PasswordAuthentication no
+          KbdInteractiveAuthentication no
+systemd:
+  units:
+    - name: eth0.network
+      enabled: true
+      contents: |
+        [Match]
+        Name=en*
+        
+        [Network]
+        DHCP=yes
