@@ -7,9 +7,9 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     lock_passwd: false
-    passwd: 'YOUR_HASHED_PASSWORD_HERE'
+    passwd: '$6$1o/imb53XkhnLR10$pXCJubY4c../gftwJDxpbeta5Pga.jekuSd.NZx5aY1WA6r8MLDKQqRugsrgtXF4.CiS6DD22Rt5pbmdEjHiA/'
     ssh_authorized_keys:
-      - ssh-rsa YOUR_SSH_PUBLIC_KEY
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE8CfNBnNfdZINcGaNUxLf6hj3plihLSmPRC2TFBZ+XI
 
 growpart:
   mode: auto
