@@ -25,3 +25,6 @@ packages:
 
 runcmd:
   - systemctl enable --now qemu-guest-agent
+  - systemctl enable --now sshd
+  - firewall-offline-cmd --add-service=ssh
+  - setenforce 0
