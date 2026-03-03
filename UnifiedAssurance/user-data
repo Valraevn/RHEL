@@ -1,0 +1,24 @@
+#cloud-config
+users:
+  - default
+  - name: urmum
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE8CfNBnNfdZINcGaNUxLf6hj3plihLSmPRC2TFBZ+XI
+
+# Grow the root partition to use the full resized virtual disk
+growpart:
+  mode: auto
+  devices: ['/']
+
+package_update: true
+packages:
+  - qemu-guest-agent
+  - wget
+  - curl
+  - tar
+  - net-tools
+
+runcmd:
+  - systemctl enable --now qemu-guest-agent
