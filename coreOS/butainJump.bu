@@ -19,11 +19,34 @@ storage:
           KbdInteractiveAuthentication no
 systemd:
   units:
-    - name: eth0.network
-      enabled: true
+    # Static IP Configuration
+    - name: 10-static-en.network
       contents: |
         [Match]
         Name=en*
-        
+
         [Network]
-        DHCP=yes
+        Address=10.1.1.250/24
+        Gateway=10.1.1.1
+        DNS=1.1.1.1
+    
+    # Oracle Unified Assurance Installation (Placeholder)
+    - name: install-unified-assurance.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Install Oracle Unified Assurance
+        After=network-online.target
+        Wants=network-online.target
+        ConditionFirstBoot=yes
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        ExecStartPre=/usr/bin/mkdir -p /opt/oracle
+        # Replace the URL below with your actual source or installation command
+        ExecStart=/usr/bin/echo "Starting Oracle Unified Assurance Setup..."
+        # Example: ExecStart=/usr/bin/curl -L http://your-repo/installer.sh | bash
+        
+        [Install]
+        WantedBy=multi-user.target
