@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+# sudo apt update && sudo apt install -y cloud-image-utils qemu-utils
+# Configuration Variables
+VM_NAME="oracle8-ua-manager"
+DISK_SIZE="100G"
+BASE_IMAGE_URL="https://yum.oracle.com/templates/OracleLinux/OL8/u10/x86_64/OL8U10_x86_64-kvm-b237.qcow2"
+IMAGE_NAME="OL8U10-cloud-base.qcow2"
+
+echo "Downloading Oracle Linux 8 Cloud Image..."
+if [ ! -f "$IMAGE_NAME" ]; then
+    wget -O "$IMAGE_NAME" "$BASE_IMAGE_URL"
+fi
+
+echo "Creating VM specific disk and resizing to $DISK_SIZE..."
+cp "$IMAGE_NAME" "${VM_NAME}.qcow2"
+qemu-img resize -f qcow2 "${VM_NAME}.qcow2" $DISK_SIZE
+
+echo "Generating cloud-init seed ISO..."
+# Note: Saving as .iso makes it easier to mount in the Unraid GUI
+cloud-localds "${VM_NAME}-seed.iso" user-data meta-data
+
+echo "Done! Ready to transfer ${VM_NAME}.qcow2 and ${VM_NAME}-seed.iso to Unraid."
