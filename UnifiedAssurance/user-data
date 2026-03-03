@@ -1,13 +1,16 @@
 #cloud-config
+ssh_pwauth: true
+
 users:
   - default
   - name: urmum
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
+    lock_passwd: false
+    passwd: 'YOUR_HASHED_PASSWORD_HERE'
     ssh_authorized_keys:
-      - ssh-rsa ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE8CfNBnNfdZINcGaNUxLf6hj3plihLSmPRC2TFBZ+XI
+      - ssh-rsa YOUR_SSH_PUBLIC_KEY
 
-# Grow the root partition to use the full resized virtual disk
 growpart:
   mode: auto
   devices: ['/']
