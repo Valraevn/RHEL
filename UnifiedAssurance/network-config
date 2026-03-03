@@ -1,0 +1,12 @@
+version: 2
+ethernets:
+  eth0:
+    match:
+      name: "e*"
+    dhcp4: false
+    addresses:
+      - 10.1.1.21/24
+    gateway4: 10.1.1.1
+    nameservers:
+      addresses:
+        - 1.1.1.1
