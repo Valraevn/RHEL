@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#Needs 200GB of storage
+
 # 1. Pre-flight checks
 if [ "$EUID" -ne 0 ]; then
   echo "!! ERROR !! Please run this script with sudo or as root."
