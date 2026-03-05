@@ -28,7 +28,9 @@ dnf install container-selinux
 echo "--- [3/5] Extracting the Depot ---"
 mkdir -p /opt/install
 rm -rf /opt/install/*
-unzip -q V1051970-01.zip -d /opt/install/
+echo "Extracting V1051970-01.zip to /opt/install/..."
+unzip -v V1051970-01.zip -d /opt/install/
+echo "Extraction complete."
 
 echo "--- [4/5] Installing the Base RPM ---"
 dnf install /opt/install/Assure1-6.1.1.0.0-365.el8.x86_64.rpm -y
