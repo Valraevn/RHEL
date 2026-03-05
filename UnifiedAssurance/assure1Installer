@@ -23,6 +23,7 @@ echo "$IP_ADDR   ua-manager.localdomain   ua-manager" >> /etc/hosts
 
 echo "--- [2/5] Installing OS Dependencies ---"
 dnf install libicu psmisc unzip -y
+dnf install container-selinux
 
 echo "--- [3/5] Extracting the Depot ---"
 mkdir -p /opt/install
