@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# 1. Pre-flight checks
+if [ "$EUID" -ne 0 ]; then
+  echo "!! ERROR !! Please run this script with sudo or as root."
+  exit 1
+fi
+
+if [ ! -f "V1051970-01.zip" ]; then
+  echo "!! ERROR !! V1051970-01.zip not found in the current directory."
+  echo "Please run this script from the directory containing the zip file."
+  exit 1
+fi
+
+echo "--- [1/5] Fixing Hostname and Local DNS ---"
+# Grab the primary IP address
+IP_ADDR=$(hostname -I | awk '{print $1}')
+# Set the kernel hostname
+hostnamectl set-hostname ua-manager.localdomain
+# Remove any old conflicting entries and append the correct one
+sed -i '/ua-manager/d' /etc/hosts
+echo "$IP_ADDR   ua-manager.localdomain   ua-manager" >> /etc/hosts
+
+echo "--- [2/5] Installing OS Dependencies ---"
+dnf install libicu psmisc unzip -y
+
+echo "--- [3/5] Extracting the Depot ---"
+mkdir -p /opt/install
+rm -rf /opt/install/*
+unzip -q V1051970-01.zip -d /opt/install/
+
+echo "--- [4/5] Installing the Base RPM ---"
+dnf install /opt/install/Assure1-6.1.1.0.0-365.el8.x86_64.rpm -y
+
+echo "--- [5/5] Running the Automated Setup Wizard ---"
+export TMP=/opt/assure1/tmp
+source /opt/assure1/.bashrc
+cd /opt/assure1/bin/
+
+# The <<EOF block automatically answers the 4 interactive prompts in order:
+# 1. Primary Presentation Server? (y)
+# 2. Web FQDN? (ua-manager.localdomain)
+# 3. Roles? (1)
+# 4. EULA? (AGREE)
+./SetupWizard --Depot /opt/install/:a1-local <<EOF
+y
+ua-manager.localdomain
+1
+AGREE
+EOF
+
+echo "=========================================================="
+echo "Unified Assurance Installation is Complete!"
+echo "=========================================================="
